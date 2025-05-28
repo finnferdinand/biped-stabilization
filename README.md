@@ -1,5 +1,7 @@
 # Simulation of biped control from Grizzle et al. (2001)
 
+![animation of walking biped](illustration.gif)
+
 This project aims to reproduce results of Grizzle et al. (2001) by recreating the simulation of a walking biped under the developed control law.
 
 This project is not affiliated with the publication or authors of Grizzle et al. (2001), all credit of developed results goes to the authors.
