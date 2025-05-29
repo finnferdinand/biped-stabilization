@@ -68,12 +68,7 @@ for i=1:N-1
     xsim(:,i+1) = xnext;
 end
 
-figure(10); clf;
-plot(xsim(1,:), xsim(6,:));
-
-figure(11); clf;
-plot(tsim, xsim(1,:));
-
+% make figure similar to the one from the original paper
 figure(12); clf;
 plot3(xsim(1,:), xsim(4,:), xsim(6,:));
 grid on;
@@ -87,7 +82,8 @@ zlabel("\(\omega_3\)","Interpreter","latex");
 
 % animation
 figure(13); clf;
-pause(1)
+input("Press enter to start animation:")
+figure(13); pause(1);
 for k=1:floor(N/200)
     i = k*200;
     theta1 = xsim(1,i);
@@ -97,7 +93,8 @@ for k=1:floor(N/200)
     % connections
     plot([0, r*sin(theta1)], [0, r*cos(theta1)], 'k-','LineWidth',1); % stance leg
     hold on; grid on;
-    plot([r*sin(theta1),r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),0], 'k-','LineWidth',1); % swing leg
+    %plot([r*sin(theta1),r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),0], 'k-','LineWidth',1); % swing leg
+    plot([r*sin(theta1),r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),r*cos(theta1)-r*cos(theta2)], 'k-','LineWidth',1); % swing leg
     plot([r*sin(theta1),r*sin(theta1)+l*sin(theta3)], [r*cos(theta1),r*cos(theta1)+l*cos(theta3)], 'k-','LineWidth',1); % torso
     
     % masses
