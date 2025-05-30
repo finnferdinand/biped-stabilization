@@ -48,18 +48,24 @@ xsim(:,1) = x0;
 tsim = 0:dt:T;
 tsim = tsim(1:end-1);
 small_number = 1e-3;
+origin = zeros(size(tsim));
 
-% simulation using Forward Euler
+% this is a very basic simulation using Forward Euler.
+% improvement suggestions:
+% - use the Hybrid Equations Toolbox, or
+% - use a fixed-step Runge-Kutta solver for better accuracy.
 for i=1:N-1
     t = tsim(i);
     x = xsim(:,i);
 
     theta1 = x(1);
 
+    origin(i+1) = origin(i);
     if theta1d - small_number < theta1 && theta1 < theta1d + small_number
         % impact
         fprintf('Impact at %.2fs\n', t)
         xnext = ImpactModel(x, parameters);
+        origin(i+1) = origin(i) + 2*r*sin(theta1d);
     else
         % continuous model
         u = Controller(x, parameters, controller_parameters);
@@ -91,21 +97,22 @@ for k=1:floor(N/200)
     theta3 = xsim(3,i);
 
     % connections
-    plot([0, r*sin(theta1)], [0, r*cos(theta1)], 'k-','LineWidth',1); % stance leg
+    plot([origin(i), origin(i)+r*sin(theta1)], [0, r*cos(theta1)], 'k-','LineWidth',1); % stance leg
     hold on; grid on;
     %plot([r*sin(theta1),r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),0], 'k-','LineWidth',1); % swing leg
-    plot([r*sin(theta1),r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),r*cos(theta1)-r*cos(theta2)], 'k-','LineWidth',1); % swing leg
-    plot([r*sin(theta1),r*sin(theta1)+l*sin(theta3)], [r*cos(theta1),r*cos(theta1)+l*cos(theta3)], 'k-','LineWidth',1); % torso
+    plot([origin(i)+r*sin(theta1),origin(i)+r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),r*cos(theta1)-r*cos(theta2)], 'k-','LineWidth',1); % swing leg
+    plot([origin(i)+r*sin(theta1),origin(i)+r*sin(theta1)+l*sin(theta3)], [r*cos(theta1),r*cos(theta1)+l*cos(theta3)], 'k-','LineWidth',1); % torso
     
     % masses
-    plot(0.5*r*sin(theta1), 0.5*r*cos(theta1), 'k.','MarkerSize',25); % stance leg
-    plot(r*sin(theta1)-0.5*r*sin(theta2),0.5*r*cos(theta2), 'k.','MarkerSize',25); % swing leg
-    plot(r*sin(theta1), r*cos(theta1), 'k.','MarkerSize',25); % hip
-    plot(r*sin(theta1)+l*sin(theta3), r*cos(theta1)+l*cos(theta3), 'k.','MarkerSize',25); % torso
+    plot(origin(i)+0.5*r*sin(theta1), 0.5*r*cos(theta1), 'k.','MarkerSize',25); % stance leg
+    plot(origin(i)+r*sin(theta1)-0.5*r*sin(theta2),0.5*r*cos(theta2), 'k.','MarkerSize',25); % swing leg
+    plot(origin(i)+r*sin(theta1), r*cos(theta1), 'k.','MarkerSize',25); % hip
+    plot(origin(i)+r*sin(theta1)+l*sin(theta3), r*cos(theta1)+l*cos(theta3), 'k.','MarkerSize',25); % torso
     hold off;
 
-
-    xlim([-1.5, 1.5]);
+    offset = origin(end)/N * i;
+    xlim([offset-1.75, offset+1.25]);
+    %xlim([-1.5, 1.5]);
     ylim([-0.5,2.5]);
     pbaspect([1,1,1]);
     title(sprintf("Time: %.2fs", tsim(i)));
