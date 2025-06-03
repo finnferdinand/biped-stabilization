@@ -27,22 +27,13 @@ dt = 1e-4;
 N = floor(T/dt);
 
 x0 = [
-    -0.35; % TODO
-    0; % TODO
+    -0.35;
     0;
-    %pi/8; % TODO
+    0;
     1;
     0;
     1.8;
 ];
-% x0 = [
-%     0.01;
-%     0;
-%     0;
-%     0;
-%     0;
-%     0;
-% ];
 xsim = zeros(6,N);
 xsim(:,1) = x0;
 tsim = 0:dt:T;
@@ -99,7 +90,6 @@ for k=1:floor(N/200)
     % connections
     plot([origin(i), origin(i)+r*sin(theta1)], [0, r*cos(theta1)], 'k-','LineWidth',1); % stance leg
     hold on; grid on;
-    %plot([r*sin(theta1),r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),0], 'k-','LineWidth',1); % swing leg
     plot([origin(i)+r*sin(theta1),origin(i)+r*sin(theta1)-r*sin(theta2)],[r*cos(theta1),r*cos(theta1)-r*cos(theta2)], 'k-','LineWidth',1); % swing leg
     plot([origin(i)+r*sin(theta1),origin(i)+r*sin(theta1)+l*sin(theta3)], [r*cos(theta1),r*cos(theta1)+l*cos(theta3)], 'k-','LineWidth',1); % torso
     
@@ -112,7 +102,6 @@ for k=1:floor(N/200)
 
     offset = origin(end)/N * i;
     xlim([offset-1.75, offset+1.25]);
-    %xlim([-1.5, 1.5]);
     ylim([-0.5,2.5]);
     pbaspect([1,1,1]);
     title(sprintf("Time: %.2fs", tsim(i)));

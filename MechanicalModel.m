@@ -44,7 +44,6 @@ function xdot = MechanicalModel(x, u, parameters)
         0, -1;
         1, 1;
     ];
-    %D,C,G,B
 
     xdot = [
         omega;
